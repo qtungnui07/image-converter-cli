@@ -27,12 +27,21 @@ jobs:
 
     - name: Build EXE
       run: |
-        pyinstaller --onefile --console --name "img" img.py
+        pyinstaller --onefile --console --name "img" --collect-all pillow-heif img.py
+
+    - name: Create Zip Package
+      shell: pwsh
+      run: |
+        $tag = "${{ github.ref_name }}"
+        mkdir package
+        copy dist/img.exe package/
+        copy setup.bat package/
+        Compress-Archive -Path package/* -DestinationPath "$tag.zip"
 
     - name: Create Release
-      id: create_release
       uses: softprops/action-gh-release@v2
       with:
-        files: dist/img.exe
+        files: |
+          ${{ github.ref_name }}.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
