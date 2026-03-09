@@ -21,7 +21,7 @@ def main():
         print("not found")
         return
 
-    print(f"converting {len(files)} to {target_ext()}...")
+    print(f"converting {len(files)} to {target_ext}...")
 
     for f in tqdm(files, desc="processing"):
         in_path = os.path.join(folder, f)
